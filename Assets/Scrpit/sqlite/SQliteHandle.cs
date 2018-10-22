@@ -7,7 +7,6 @@ public class SQliteHandle : ScriptableObject
 {
     private readonly static string DBPath = "data source=" + Application.streamingAssetsPath + "/SQLiteDataBase/";
 
-
     public static SQLiteHelper GetSQLiteHelper(string dbName)
     {
         SQLiteHelper helper = new SQLiteHelper(DBPath + dbName);
@@ -55,7 +54,6 @@ public class SQliteHandle : ScriptableObject
                 sql.CloseConnection();
         }
     }
-
 
     /// <summary>
     /// 更新数据
