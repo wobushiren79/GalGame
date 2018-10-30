@@ -3,7 +3,6 @@ using UnityEditor;
 
 public class LogUtil 
 {
-
     public enum LogEnum
     {
         Normal,//普通日志

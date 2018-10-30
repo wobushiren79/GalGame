@@ -42,7 +42,7 @@ public class SQliteHandle : ScriptableObject
         }
         try
         {
-            sql.createTable(tableName, keyNameList, valueNameList);
+            sql.CreateTable(tableName, keyNameList, valueNameList);
         }
         catch (Exception e)
         {
@@ -51,7 +51,7 @@ public class SQliteHandle : ScriptableObject
         finally
         {
             if (sql != null)
-                sql.closeConnection();
+                sql.CloseConnection();
         }
     }
 
@@ -75,7 +75,7 @@ public class SQliteHandle : ScriptableObject
         SQLiteHelper sql = GetSQLiteHelper(dbName);
         try
         {
-            sql.updateValues(mainTable, dataNames, dataValue, key, operation, value);
+            sql.UpdateValues(mainTable, dataNames, dataValue, key, operation, value);
         }
         catch (Exception e)
         {
@@ -84,7 +84,7 @@ public class SQliteHandle : ScriptableObject
         finally
         {
             if (sql != null)
-                sql.closeConnection();
+                sql.CloseConnection();
         }
     }
     public static void UpdateTableData(string dbName, string mainTable, string[] dataNames, string[] dataValue)
@@ -114,7 +114,7 @@ public class SQliteHandle : ScriptableObject
         {
             T tempData = Activator.CreateInstance<T>();
             List<String> dataNameList = ReflexUtil.GetAllName(tempData);
-            reader = sql.readTable(mainTable, leftTableName, mainKey, leftKey, mainColNames, mainOperations, mainColValues);
+            reader = sql.ReadTable(mainTable, leftTableName, mainKey, leftKey, mainColNames, mainOperations, mainColValues);
             while (reader.Read())
             {
                 T itemData = Activator.CreateInstance<T>();
@@ -144,7 +144,7 @@ public class SQliteHandle : ScriptableObject
         finally
         {
             if (sql != null)
-                sql.closeConnection();
+                sql.CloseConnection();
             if (reader != null)
                 reader.Close();
         }
