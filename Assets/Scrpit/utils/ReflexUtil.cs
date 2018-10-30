@@ -11,7 +11,7 @@ public class ReflexUtil : ScriptableObject
     /// <typeparam name="T"></typeparam>
     /// <param name="classType"></param>
     /// <returns></returns>
-    public static List<string> getAllName<T>(T classType)
+    public static List<string> GetAllName<T>(T classType)
     {
         List<string> listName = new List<string>();
         Type type = classType.GetType();
@@ -34,7 +34,7 @@ public class ReflexUtil : ScriptableObject
     /// <typeparam name="T"></typeparam>
     /// <param name="classType"></param>
     /// <returns></returns>
-    public static Dictionary<String, object> getAllNameAndValue<T>(T classType)
+    public static Dictionary<String, object> GetAllNameAndValue<T>(T classType)
     {
         Dictionary<String, object> listData = new Dictionary<string, object>();
         Type type = classType.GetType();
@@ -58,7 +58,7 @@ public class ReflexUtil : ScriptableObject
     /// <param name="classType"></param>
     /// <param name="name"></param>
     /// <param name="value"></param>
-    public static void setValueByName<T>(T classType,string name,object value)
+    public static void SetValueByName<T>(T classType,string name,object value)
     {
         Type type = classType.GetType();
         PropertyInfo propertyInfo = type.GetProperty(name);

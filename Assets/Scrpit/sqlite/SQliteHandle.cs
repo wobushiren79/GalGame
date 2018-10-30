@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class SQliteHandle : ScriptableObject
 {
-    private readonly static string DBPath = "data source=" + Application.streamingAssetsPath + "/SQLiteDataBase/";
+    private readonly static string DB_PATH = "data source=" + Application.streamingAssetsPath + "/SQLiteDataBase/";
 
     public static SQLiteHelper GetSQLiteHelper(string dbName)
     {
-        SQLiteHelper helper = new SQLiteHelper(DBPath + dbName);
+        SQLiteHelper helper = new SQLiteHelper(DB_PATH + dbName);
         return helper;
     }
 
@@ -42,7 +42,7 @@ public class SQliteHandle : ScriptableObject
         }
         try
         {
-            sql.CreateTable(tableName, keyNameList, valueNameList);
+            sql.createTable(tableName, keyNameList, valueNameList);
         }
         catch (Exception e)
         {
@@ -51,7 +51,7 @@ public class SQliteHandle : ScriptableObject
         finally
         {
             if (sql != null)
-                sql.CloseConnection();
+                sql.closeConnection();
         }
     }
 
@@ -75,7 +75,7 @@ public class SQliteHandle : ScriptableObject
         SQLiteHelper sql = GetSQLiteHelper(dbName);
         try
         {
-            sql.UpdateValues(mainTable, dataNames, dataValue, key, operation, value);
+            sql.updateValues(mainTable, dataNames, dataValue, key, operation, value);
         }
         catch (Exception e)
         {
@@ -84,7 +84,7 @@ public class SQliteHandle : ScriptableObject
         finally
         {
             if (sql != null)
-                sql.CloseConnection();
+                sql.closeConnection();
         }
     }
     public static void UpdateTableData(string dbName, string mainTable, string[] dataNames, string[] dataValue)
@@ -113,8 +113,8 @@ public class SQliteHandle : ScriptableObject
         try
         {
             T tempData = Activator.CreateInstance<T>();
-            List<String> dataNameList = ReflexUtil.getAllName(tempData);
-            reader = sql.ReadTable(mainTable, leftTableName, mainKey, leftKey, mainColNames, mainOperations, mainColValues);
+            List<String> dataNameList = ReflexUtil.GetAllName(tempData);
+            reader = sql.readTable(mainTable, leftTableName, mainKey, leftKey, mainColNames, mainOperations, mainColValues);
             while (reader.Read())
             {
                 T itemData = Activator.CreateInstance<T>();
@@ -130,7 +130,7 @@ public class SQliteHandle : ScriptableObject
                     string name = reader.GetName(ordinal);
                     object value = reader.GetValue(ordinal);
                     if (value != null && !value.ToString().Equals("")) 
-                    ReflexUtil.setValueByName(itemData, dataName, value);
+                    ReflexUtil.SetValueByName(itemData, dataName, value);
                 }
                 listData.Add(itemData);
             }
@@ -144,7 +144,7 @@ public class SQliteHandle : ScriptableObject
         finally
         {
             if (sql != null)
-                sql.CloseConnection();
+                sql.closeConnection();
             if (reader != null)
                 reader.Close();
         }

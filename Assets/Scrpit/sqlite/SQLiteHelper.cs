@@ -7,17 +7,17 @@ public class SQLiteHelper : ScriptableObject
     /// <summary>
     /// 数据库连接定义
     /// </summary>
-    private SqliteConnection dbConnection;
+    private SqliteConnection mDbConnection;
 
     /// <summary>
     /// SQL命令定义
     /// </summary>
-    private SqliteCommand dbCommand;
+    private SqliteCommand mDbCommand;
 
     /// <summary>
     /// 数据读取定义
     /// </summary>
-    private SqliteDataReader dataReader;
+    private SqliteDataReader mDataReader;
 
     /// <summary>
     /// 构造函数    
@@ -28,9 +28,9 @@ public class SQLiteHelper : ScriptableObject
         try
         {
             //构造数据库连接
-            dbConnection = new SqliteConnection(connectionString);
+            mDbConnection = new SqliteConnection(connectionString);
             //打开数据库
-            dbConnection.Open();
+            mDbConnection.Open();
         }
         catch (Exception e)
         {
@@ -43,39 +43,39 @@ public class SQLiteHelper : ScriptableObject
     /// </summary>
     /// <returns>The query.</returns>
     /// <param name="queryString">SQL命令字符串</param>
-    public SqliteDataReader ExecuteQuery(string queryString)
+    public SqliteDataReader executeQuery(string queryString)
     {
-        dbCommand = dbConnection.CreateCommand();
-        dbCommand.CommandText = queryString;
-        dataReader = dbCommand.ExecuteReader();
-        return dataReader;
+        mDbCommand = mDbConnection.CreateCommand();
+        mDbCommand.CommandText = queryString;
+        mDataReader = mDbCommand.ExecuteReader();
+        return mDataReader;
     }
 
     /// <summary>
     /// 关闭数据库连接
     /// </summary>
-    public void CloseConnection()
+    public void closeConnection()
     {
         //销毁Command
-        if (dbCommand != null)
+        if (mDbCommand != null)
         {
-            dbCommand.Cancel();
+            mDbCommand.Cancel();
         }
-        dbCommand = null;
+        mDbCommand = null;
 
         //销毁Reader
-        if (dataReader != null)
+        if (mDataReader != null)
         {
-            dataReader.Close();
+            mDataReader.Close();
         }
-        dataReader = null;
+        mDataReader = null;
 
         //销毁Connection
-        if (dbConnection != null)
+        if (mDbConnection != null)
         {
-            dbConnection.Close();
+            mDbConnection.Close();
         }
-        dbConnection = null;
+        mDbConnection = null;
     }
 
 
@@ -86,7 +86,7 @@ public class SQLiteHelper : ScriptableObject
     /// <returns>The values.</returns>
     /// <param name="tableName">数据表名称</param>
     /// <param name="values">插入的数值</param>
-    public SqliteDataReader InsertValues(string tableName, string[] values)
+    public SqliteDataReader insertValues(string tableName, string[] values)
     {
         //获取数据表中字段数目
         int fieldCount = ReadTable(tableName).FieldCount;
@@ -102,7 +102,7 @@ public class SQLiteHelper : ScriptableObject
             queryString += ", " + values[i];
         }
         queryString += " )";
-        return ExecuteQuery(queryString);
+        return executeQuery(queryString);
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ public class SQLiteHelper : ScriptableObject
     /// <param name="colValues">字段名对应的数据</param>
     /// <param name="key">关键字</param>
     /// <param name="value">关键字对应的值</param>
-    public SqliteDataReader UpdateValues(string tableName, string[] colNames, string[] colValues, string key, string operation, string value)
+    public SqliteDataReader updateValues(string tableName, string[] colNames, string[] colValues, string key, string operation, string value)
     {
         //当字段名称和字段数值不对应时引发异常
         if (colNames.Length != colValues.Length)
@@ -128,7 +128,7 @@ public class SQLiteHelper : ScriptableObject
             queryString += ", " + colNames[i] + "=" + colValues[i];
         }
         queryString += " WHERE " + key + operation + value;
-        return ExecuteQuery(queryString);
+        return executeQuery(queryString);
     }
 
     /// <summary>
@@ -138,7 +138,7 @@ public class SQLiteHelper : ScriptableObject
     /// <param name="tableName">数据表名称</param>
     /// <param name="colNames">字段名</param>
     /// <param name="colValues">字段名对应的数据</param>
-    public SqliteDataReader DeleteValuesOR(string tableName, string[] colNames, string[] operations, string[] colValues)
+    public SqliteDataReader deleteValuesOR(string tableName, string[] colNames, string[] operations, string[] colValues)
     {
         //当字段名称和字段数值不对应时引发异常
         if (colNames.Length != colValues.Length || operations.Length != colNames.Length || operations.Length != colValues.Length)
@@ -151,7 +151,7 @@ public class SQLiteHelper : ScriptableObject
         {
             queryString += "OR " + colNames[i] + operations[0] + colValues[i];
         }
-        return ExecuteQuery(queryString);
+        return executeQuery(queryString);
     }
 
     /// <summary>
@@ -161,7 +161,7 @@ public class SQLiteHelper : ScriptableObject
     /// <param name="tableName">数据表名称</param>
     /// <param name="colNames">字段名</param>
     /// <param name="colValues">字段名对应的数据</param>
-    public SqliteDataReader DeleteValuesAND(string tableName, string[] colNames, string[] operations, string[] colValues)
+    public SqliteDataReader deleteValuesAND(string tableName, string[] colNames, string[] operations, string[] colValues)
     {
         //当字段名称和字段数值不对应时引发异常
         if (colNames.Length != colValues.Length || operations.Length != colNames.Length || operations.Length != colValues.Length)
@@ -174,7 +174,7 @@ public class SQLiteHelper : ScriptableObject
         {
             queryString += " AND " + colNames[i] + operations[i] + colValues[i];
         }
-        return ExecuteQuery(queryString);
+        return executeQuery(queryString);
     }
 
     /// <summary>
@@ -184,7 +184,7 @@ public class SQLiteHelper : ScriptableObject
     /// <param name="tableName">数据表名</param>
     /// <param name="colNames">字段名</param>
     /// <param name="colTypes">字段名类型</param>
-    public SqliteDataReader CreateTable(string tableName, string[] colNames, string[] colTypes)
+    public SqliteDataReader createTable(string tableName, string[] colNames, string[] colTypes)
     {
         string queryString = "CREATE TABLE " + tableName + "( " + colNames[0] + " " + colTypes[0];
         for (int i = 1; i < colNames.Length; i++)
@@ -192,7 +192,7 @@ public class SQLiteHelper : ScriptableObject
             queryString += ", " + colNames[i] + " " + colTypes[i];
         }
         queryString += "  ) ";
-        return ExecuteQuery(queryString);
+        return executeQuery(queryString);
     }
 
 
@@ -207,7 +207,7 @@ public class SQLiteHelper : ScriptableObject
     /// <param name="mainOperations"></param>
     /// <param name="mainColValues"></param>
     /// <returns></returns>
-    public SqliteDataReader ReadTable(string mainTableName, string[] leftTableName, string mainKey, string[] leftKey, string[] mainColNames, string[] mainOperations, string[] mainColValues)
+    public SqliteDataReader readTable(string mainTableName, string[] leftTableName, string mainKey, string[] leftKey, string[] mainColNames, string[] mainOperations, string[] mainColValues)
     {
         if (mainTableName == null)
         {
@@ -240,20 +240,20 @@ public class SQLiteHelper : ScriptableObject
         }
 
         string queryStr = selectStr + fromStr + whereStr;
-        return ExecuteQuery(queryStr);
+        return executeQuery(queryStr);
     }
 
     public SqliteDataReader ReadTable(string tableName)
     {
-        return ReadTable(tableName, null, null, null, null, null, null);
+        return readTable(tableName, null, null, null, null, null, null);
     }
     public SqliteDataReader ReadTable(string tableName, string[] colNames, string[] operations, string[] colValues)
     {
-        return ReadTable(tableName, null, null, null, colNames, operations, colValues);
+        return readTable(tableName, null, null, null, colNames, operations, colValues);
     }
     public SqliteDataReader ReadTable(string mainTableName, string[] leftTableName, string mainKey, string[] leftKey)
     {
-        return ReadTable(mainTableName, leftTableName, mainKey, leftKey, null, null, null);
+        return readTable(mainTableName, leftTableName, mainKey, leftKey, null, null, null);
     }
 
 
